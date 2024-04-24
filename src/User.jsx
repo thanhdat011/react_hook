@@ -1,6 +1,9 @@
 import React from "react";
+import { useContext } from "react";
+import { createContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import UserProfile from "./UserProfile";
 
 const initialAddress = () => {
   // console.log('initialAddress')
@@ -26,6 +29,19 @@ const getAddress = () => {
     }, 3000);
   });
 };
+
+export const UserContext = createContext({
+  address: {
+    nation: "Vietnam",
+    city: {
+      street: "200 Dien Bien Phu, Da Nang",
+      house: "Building",
+    },
+  },
+  age: 100,
+  firstName: "Alexa",
+  increaseAge: () => {},
+});
 export default function User() {
   const [firstName, setFirstName] = useState("Alex");
   const [age, setAge] = useState(24);
@@ -63,14 +79,9 @@ export default function User() {
   return (
     <div>
       User Functional Component
-      <ul>
-        <li>First Name: {firstName}</li>
-        <li>Age: {age}</li>
-        <li>Nation: {address.nation}</li>
-        <li>Street: {address.city.street}</li>
-        <li>House: {address.city.house}</li>
-      </ul>
-      <button onClick={increaseAge}>Increase Age</button>
+      <UserContext.Provider value={{ address, age, firstName, increaseAge }}>
+        <UserProfile />
+      </UserContext.Provider>
       <button onClick={rerender}>Rerender Age</button>
     </div>
   );
